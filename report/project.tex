@@ -1,0 +1,31 @@
+\documentclass{article}
+\title{DB Project}
+\author{Amartya Sanyal :13089 \\ Sanjana Garg :13617}
+\begin{document}
+\maketitle
+\section{Project Idea}
+A graph visualization system: Most graph visualization tools end up displaying a giant mess of links. We plan to develop an app that interactively allows us to zoom in and zoom out by  automatically clustering or sampling nodes and edges so that the user is not overwhelmed with the visualization. We plan to implement some other graph analysis options too and provide scalable techniques for implementing the above idea.
+
+\section{Application}
+Usually visualizing a very large graph is difficult both in terms of the complexity in the huge number of edges as well as storing the entire graph in memory. We plan to use database to store the graphs and then define a wrapper around it in python that can provide various labels of abstraction such that at a time only a few nodes are stored in memory. 
+
+\section{Access levels}
+There will be an admin level access and a user level access. An user can view the graph in different levels while the admin can add and remove edges and recalculate the properties.
+
+\section{Methodology}
+We plan to implement hierarchial clustering in the graph using SQL and then store the cluster tree information in an SQL database. While displaying, the required cluster can be selected at the required level of abstraction and displayed using python libraries like networkx. The main work of the project would be in
+\begin{itemize}
+\item Deciding and implementing the correct \textit{relations} to  store this data .
+\item Implementing \textit{clustering} using SQL.
+\item Implementing other algorithms to  display other graph properties. Some examples :-
+  \begin{enumerate}
+  \item Centrality
+  \item Density
+  \item Clustering Coefficient
+  \end{enumerate}
+
+\item \textit{Displaying} the graph using python libraries like networkx in   an aesthetic manner and applying a certain level of \textit{interactivity}.
+\end{itemize}
+
+
+\end{document}
