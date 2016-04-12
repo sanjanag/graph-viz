@@ -15,7 +15,7 @@ class connector(object):
 
 
 def connect():
-    dbname = 'graphx'
+    dbname = 'GraphX'
     hostname = 'localhost'
     username = 'postgres'
     passwd = 'alohomora'
@@ -23,7 +23,7 @@ def connect():
     return gX
     
 if __name__ == '__main__':
-    dbname = 'graphx'
+    dbname = 'GraphX'
     hostname = 'localhost'
     username = 'postgres'
     passwd = 'alohomora'

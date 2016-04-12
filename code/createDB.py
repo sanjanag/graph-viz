@@ -19,14 +19,17 @@ PRIMARY KEY(row_id,column_id));''')
 print "Table 'edges' created successfully"
 gX.conn.commit()
 
-file_path = "../data/testdata"
+file_path = "../data/umbcblog_feature.data"
 
 with open(file_path) as f:
     for line in f:
             line= line.split()
             row_id = int(line[0])
             column_id = int(line[1])
-            weight = int(line[2])
+            if len(line) == 3:
+                weight = line[2]
+            else:
+                weight = 1
             
             try:
                 cur.execute("INSERT INTO testedges VALUES(%s, %s, %s)",(row_id,column_id,weight))
@@ -71,4 +74,6 @@ CREATE or REPLACE FUNCTION multiply(testedges,testedges) RETURNS result AS '
  insert into result (row_id,column_id,weight) select row_id,column_id,weight from (select $1.row_id, $2.column_id , sum($1.weight*$2.weight) as weight where $1.column_id = $2.row_id group by $1.row_id,$2.column_id) as A; select * from result;
     ' LANGUAGE SQL;
 '''
+'''
 insert into result (row_id,column_id,weight) select a.row_id as row_id, b.column_id as column_id, sum(a.weight*b.weight) as weight from testedges as a, testedges as b where a.column_id = b.row_id group by a.row_id,b.column_id; 
+'''

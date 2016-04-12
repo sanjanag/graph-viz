@@ -15,7 +15,7 @@ def scale_v():
     gX.conn.commit()
 
 def missing_v():
-    cur.execute("select count(*) from nodes")
+    cur.execute("select count(*) from testnodes")
     nodes = cur.fetchone()[0]
 
     for i in range(1,nodes+1):
@@ -32,7 +32,7 @@ def create_centroids():
     gX.conn.commit()
 
 
-def initialise_centroids():
+def initialise_centroids(no_clusters):
     cur.execute("insert into CENTROIDS (weight) select weight from (select distinct weight from V) as x order by random() limit %(no)s",{'no':no_clusters})
     gX.conn.commit()
 
@@ -48,7 +48,7 @@ def assign_cluster():
     cur.execute("insert into CLUSTERS (node_id,cluster_id, prev_cluster_id) select x.row_id as node_id, min(y.cluster_id) as cluster_id, 0 as prev_cluster_id from ( select v.row_id, min(abs(c.weight-v.weight)) as min_distance from centroids as c, v group by v.row_id) as x, (select c.cluster_id,v.row_id,abs(c.weight-v.weight) as distance from centroids as c,v) as y where x.row_id=y.row_id and x.min_distance=y.distance group by x.row_id")
     gX.conn.commit()
 
-def update_centroids():
+def update_centroids(no_clusters):
     for i in range(1,no_clusters+1):
         cur.execute("update centroids set weight=(select avg(v.weight) from V, (select node_id from clusters where cluster_id=%(i)s) as x where x.node_id=v.row_id) where cluster_id=%(i)s",{'i':i})
         gX.conn.commit()
@@ -61,32 +61,33 @@ def prev_cluster():
     cur.execute("update clusters set prev_cluster_id = x.cluster_id from (select cluster_id,node_id  from clusters) as x where x.node_id = clusters.node_id")
     gX.conn.commit()
 
-
-no_clusters = int(raw_input("specify the number of clusters: "))
-create_centroids()
-print "create_centroids"
-initialise_centroids()
-print "initialise centroids"
-create_clusters()
-print "create_clusters"
-assign_cluster()
-print("assign clusters")
-
-cur.execute("select count(*) from clusters where cluster_id != prev_cluster_id")
-count = cur.fetchone()[0]
-print count
-
-iter = 0
-while(count != 0):
-    print iter
-    update_centroids()
-    print "updated centroids"
-    prev_cluster()
-    print "updated prev cluster"
-    reassign_cluster()
-    print "reassigned clusters"
+def cluster_all(k):
+    scale_v()
+    missing_v()
+    create_centroids()
+    print "create_centroids"
+    initialise_centroids(int(k))
+    print "initialise centroids"
+    create_clusters()
+    print "create_clusters"
+    assign_cluster()
+    print("assign clusters")
+    
     cur.execute("select count(*) from clusters where cluster_id != prev_cluster_id")
     count = cur.fetchone()[0]
     print count
-    iter += 1
+
+    iter = 0
+    while(count != 0):
+        print iter
+        update_centroids(int(k))
+        print "updated centroids"
+        prev_cluster()
+        print "updated prev cluster"
+        reassign_cluster()
+        print "reassigned clusters"
+        cur.execute("select count(*) from clusters where cluster_id != prev_cluster_id")
+        count = cur.fetchone()[0]
+        print count
+        iter += 1
     
