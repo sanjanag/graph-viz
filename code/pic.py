@@ -117,8 +117,9 @@ def iterate(thresh):
         print dimv ,"Dimension of v and count is ",count
         if iter%5 == 0:
             print "Iteration :"+str(iter)
-        return iter
-def picl(thresh):
+    gX.conn.commit()
+    return iter
+def power(thresh):
     initialise_v()
     print "initialise v"        
     create_A()
@@ -140,3 +141,5 @@ def picl(thresh):
     calc_deltaT()
     print "calc deltat"
     return iterate(thresh)
+if __name__ == '__main__':
+    picl(0.00001)

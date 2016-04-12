@@ -7,6 +7,7 @@ def clearTemp():
     print "Starting deletion"
     #print cur.fetchone()[0]
     curr.execute("drop table if exists vt")
+    gX.conn.commit()
     print "Dropped vt"
     curr.execute("drop table if exists v")
     print "Dropped v"

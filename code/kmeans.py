@@ -75,6 +75,7 @@ def cluster_all(k):
     
     cur.execute("select count(*) from clusters where cluster_id != prev_cluster_id")
     count = cur.fetchone()[0]
+    gX.conn.commit()
     print count
 
     iter = 0

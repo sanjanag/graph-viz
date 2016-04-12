@@ -44,8 +44,9 @@ class MyDialog:
         kmeans = self.e.get()
         clearCluster()
         clearTemp()
-        picl(0.000001)
+        power(0.0000001)
         cluster_all(kmeans)
+        print"Done Clustering"
         self.top.destroy()
 
 
@@ -100,7 +101,8 @@ def do_pic():
     thresh = 0.000001
     print "Cleared"
     listbox.delete(4)
-    listbox.insert(END,"PIC Iteration :"+str(picl(thresh)))
+    iter_n = power(thresh)
+    listbox.insert(END,"PIC Iteration :"+str(iter_n))
 
 if __name__ == '__main__':
     root = Tk.Tk()
@@ -155,6 +157,7 @@ if __name__ == '__main__':
 
     separator = Frame(height=2, bd=1, relief=SUNKEN,master=m2)
     separator.pack(fill=Tk.X, padx=1, pady=1)
+    '''
     e = Entry(m2)
     e.pack()
 
@@ -164,7 +167,7 @@ if __name__ == '__main__':
         print e.get()
 
     b = Button(m2, text="get", width=10, command=ecallback)
-    b.pack()
+    b.pack()'''
     button = MyDialog(root)
     button = Tk.Button(master=m2, text='Quit', command=sys.exit)
     button.pack(side=Tk.BOTTOM)
